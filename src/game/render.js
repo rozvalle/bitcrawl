@@ -6,7 +6,7 @@ export function render(map, player, visible, explored) {
     for (let y = 0; y < HEIGHT; y++) {
         for (let x = 0; x < WIDTH; x++) {
             const key = `${x},${y}`;
-            const tile = map.get(key);
+            const tile = map.tiles.get(key);
             if (!tile) continue;
 
             if (visible.has(key)) {
@@ -27,6 +27,7 @@ export function render(map, player, visible, explored) {
         }
     }
 
+    // draw player
     ctx.fillStyle = "#0f0";
     ctx.fillRect(
         player.x * TILE_SIZE,

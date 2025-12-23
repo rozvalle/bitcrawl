@@ -11,16 +11,16 @@ const DIRS = {
     d: [1, 0],
 };
 
-export function setupInput(player, map, redraw) {
+export function setupInput(player, redraw) {
     window.addEventListener("keydown", (e) => {
         const dir = DIRS[e.key];
         if (!dir) return;
 
         const nx = player.x + dir[0];
         const ny = player.y + dir[1];
-        const tile = map.get(`${nx},${ny}`);
 
-        if (tile?.walkable) {
+        // always check the current global map
+        if (window.map.isWalkable(nx, ny)) {
             player.x = nx;
             player.y = ny;
             redraw();

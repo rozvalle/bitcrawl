@@ -6,6 +6,7 @@ import { computeFOV } from "./game/fov";
 import { setupUI, addMessage } from "./ui";
 import { zzfx } from "./audio/zzfxMicro"; // for sound effects
 import "./style.css";
+import { loadSprites } from "./game/sprites";
 
 export const TILE_SIZE = 16;
 export const WIDTH = 60;
@@ -21,8 +22,8 @@ ctx.imageSmoothingEnabled = false;
 // -------------------
 // Game state
 // -------------------
-export let map = createMap(WIDTH, HEIGHT);
-export const player = createPlayer(map);
+window.map = createMap(WIDTH, HEIGHT); // make global
+export const player = createPlayer(window.map);
 
 export let visible = new Set();
 export let explored = new Set();
@@ -34,8 +35,8 @@ let muted = false;
 // Helpers
 // -------------------
 function gameLoop() {
-  visible = showFOV ? computeFOV(player, map) : new Set();
-  render(map, player, visible, explored);
+  visible = showFOV ? computeFOV(player, window.map) : new Set();
+  render(window.map, player, visible, explored);
 }
 
 function playClick() {
@@ -48,9 +49,20 @@ function playClick() {
 setupUI({
   regenCallback: () => {
     playClick();
-    map = createMap(WIDTH, HEIGHT); // regenerate the dungeon
+
+    const newMap = createMap(WIDTH, HEIGHT);
+
+    // reset player on valid floor
+    const { x, y } = newMap.getRandomFloorTile();
+    player.x = x;
+    player.y = y;
+
     explored.clear();
     visible.clear();
+
+    // update global map reference
+    window.map = newMap;
+
     addMessage("Dungeon regenerated!");
     gameLoop();
   },
@@ -70,7 +82,9 @@ setupUI({
 // -------------------
 // Setup input for player movement
 // -------------------
-setupInput(player, map, gameLoop);
+setupInput(player, gameLoop);
 
-// initial render
+// -------------------
+// Initial render
+// -------------------
 gameLoop();
