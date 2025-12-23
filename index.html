@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>BitCrawl</title>
-  </head>
-  <body>
-    <canvas id="game"></canvas>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
+  <title>BitCrawl</title>
+</head>
+
+<body>
+  <div id="ui-container">
+
+    <!-- Canvas container -->
+    <div id="game-wrapper" class="nes-container is-dark with-title">
+      <p class="title">Dungeon</p>
+      <canvas id="game"></canvas>
+    </div>
+
+    <!-- Message log container -->
+    <div id="message-log">
+    </div>
+
+    <!-- Controls container -->
+    <div id="controls">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <button id="regen" class="nes-btn">Regenerate Dungeon</button>
+        <button id="toggle-fov" class="nes-btn">Toggle FOV</button>
+        <button id="mute" class="nes-btn">Mute</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
