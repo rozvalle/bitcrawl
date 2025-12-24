@@ -22,13 +22,13 @@ export function setupUI({ regenCallback, toggleFOVCallback, muteCallback }) {
         regenCallback();
     });
 
-    document.getElementById("toggle-fov").addEventListener("click", () => {
-        buttonClickSound();
-        toggleFOVCallback();
-    });
+    // document.getElementById("toggle-fov").addEventListener("click", () => {
+    //     buttonClickSound();
+    //     toggleFOVCallback();
+    // });
 
-    document.getElementById("mute").addEventListener("click", () => {
-        buttonClickSound();
-        muteCallback();
-    });
+    // document.getElementById("mute").addEventListener("click", () => {
+    //     buttonClickSound();
+    //     muteCallback();
+    // });
 }
