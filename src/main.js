@@ -45,6 +45,8 @@ loadSprites(() => {
       player.y = y;
       explored.clear();
       visible.clear();
+
+      generateMonsters(window.map);
       addMessage("Dungeon regenerated!");
       gameLoop();
     },
