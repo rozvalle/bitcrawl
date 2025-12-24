@@ -6,6 +6,7 @@ import { computeFOV } from "./game/fov";
 import { setupUI, addMessage } from "./ui";
 import { generateMonsters, monsters } from "./game/monster";
 import { loadSprites } from "./game/sprites";
+import { inFight } from "./game/fight";
 import "./style.css";
 
 export const TILE_SIZE = 16;
@@ -19,6 +20,7 @@ export const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 
 let player, visible, explored;
+
 
 loadSprites(() => {
   console.log("Sprites loaded");
@@ -39,6 +41,7 @@ loadSprites(() => {
 
   setupUI({
     regenCallback: () => {
+      if (inFight) return;
       window.map = createMap(WIDTH, HEIGHT);
       const { x, y } = window.map.getRandomFloorTile();
       player.x = x;
@@ -47,6 +50,7 @@ loadSprites(() => {
       visible.clear();
 
       generateMonsters(window.map);
+      player.hp = 20; // reset player HP on regen
       addMessage("Dungeon regenerated!");
       gameLoop();
     },
