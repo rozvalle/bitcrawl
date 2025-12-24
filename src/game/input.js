@@ -22,11 +22,14 @@ export function setupInput(player, redraw) {
         const ny = player.y + dir[1];
 
         // First, check if there's a monster at the new location
+        // check for monster first
         const monster = monsters.find(m => m.alive && m.x === nx && m.y === ny);
         if (monster) {
-            addMessage(`You encounter a ${monster.type}!`);
-            // TODO: trigger turn-based combat UI here
-            return; // prevent moving into monster tile until combat is resolved
+            monster.alive = false;         // kill monster immediately
+            addMessage(`You defeated a ${monster.type}!`);
+            stepSound();                   // optional sound
+            redraw();
+            return; // stop normal movement (optional: move into the tile)
         }
 
         // If no monster, check if tile is walkable
