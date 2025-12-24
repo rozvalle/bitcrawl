@@ -4,7 +4,7 @@ import { setupInput } from "./game/input";
 import { render } from "./game/render";
 import { computeFOV } from "./game/fov";
 import { setupUI, addMessage } from "./ui";
-import { zzfx } from "./audio/zzfxMicro";
+import { generateMonsters, monsters } from "./game/monster";
 import { loadSprites } from "./game/sprites";
 import "./style.css";
 
@@ -26,6 +26,7 @@ loadSprites(() => {
   // create map and player
   window.map = createMap(WIDTH, HEIGHT);
   player = createPlayer(window.map);
+  generateMonsters(window.map);
   visible = new Set();
   explored = new Set();
 
