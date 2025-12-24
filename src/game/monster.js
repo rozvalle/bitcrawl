@@ -7,6 +7,7 @@ export function createMonster(type, map) {
         x,
         y,
         hp: 10,
+        maxHp: 10,
         alive: true
     };
 }
