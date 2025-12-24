@@ -1,29 +1,26 @@
-// game/monster.js
-export function createMonster(type, x, y) {
-    const stats = {
-        goblin: { hp: 10, attack: 3 },
-        orc: { hp: 20, attack: 5 },
-        // add more types here
-    };
+import { map } from "../main"; // optional, depends on how you structure
+import { sprites } from "./sprites";
 
+export let monsters = []; // global monster list
+
+// Monster constructor
+export function createMonster(type, map) {
+    const { x, y } = map.getRandomFloorTile();
     return {
-        type,
+        type,       // e.g., "goblin", "slime"
         x,
         y,
-        hp: stats[type].hp,
-        attack: stats[type].attack,
+        hp: 10,
         alive: true
     };
 }
 
-export let monsters = [];
-
-export function spawnMonsters(map, count = 5) {
-    const { createMonster } = require("./monster"); // or import if using ES6
-    monsters = [];
+// Generate monsters for the dungeon
+export function generateMonsters(map, count = 5) {
+    monsters = []; // clear old monsters
+    const types = ["goblin", "slime", "bat"]; // must have matching sprites
     for (let i = 0; i < count; i++) {
-        const { x, y } = map.getRandomFloorTile();
-        monsters.push(createMonster("goblin", x, y));
+        const type = types[Math.floor(Math.random() * types.length)];
+        monsters.push(createMonster(type, map));
     }
-    return monsters;
 }
