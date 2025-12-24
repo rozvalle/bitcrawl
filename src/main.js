@@ -4,9 +4,9 @@ import { setupInput } from "./game/input";
 import { render } from "./game/render";
 import { computeFOV } from "./game/fov";
 import { setupUI, addMessage } from "./ui";
-import { zzfx } from "./audio/zzfxMicro"; // for sound effects
-import "./style.css";
+import { zzfx } from "./audio/zzfxMicro";
 import { loadSprites } from "./game/sprites";
+import "./style.css";
 
 export const TILE_SIZE = 16;
 export const WIDTH = 60;
@@ -15,76 +15,47 @@ export const HEIGHT = 25;
 const canvas = document.getElementById("game");
 canvas.width = WIDTH * TILE_SIZE;
 canvas.height = HEIGHT * TILE_SIZE;
-
 export const ctx = canvas.getContext("2d");
 ctx.imageSmoothingEnabled = false;
 
-// -------------------
-// Game state
-// -------------------
-window.map = createMap(WIDTH, HEIGHT); // make global
-export const player = createPlayer(window.map);
+let player, visible, explored;
 
-export let visible = new Set();
-export let explored = new Set();
+loadSprites(() => {
+  console.log("Sprites loaded");
 
-let showFOV = true;
-let muted = false;
+  // create map and player
+  window.map = createMap(WIDTH, HEIGHT);
+  player = createPlayer(window.map);
+  visible = new Set();
+  explored = new Set();
 
-// -------------------
-// Helpers
-// -------------------
-function gameLoop() {
-  visible = showFOV ? computeFOV(player, window.map) : new Set();
-  render(window.map, player, visible, explored);
-}
+  const gameLoop = () => {
+    visible = computeFOV(player, window.map);
+    render(window.map, player, visible, explored);
+  };
 
-function playClick() {
-  if (!muted) zzfx(0.2, 0.5, 400); // simple click sound
-}
+  setupInput(player, gameLoop);
 
-// -------------------
-// Setup UI buttons
-// -------------------
-setupUI({
-  regenCallback: () => {
-    playClick();
+  setupUI({
+    regenCallback: () => {
+      window.map = createMap(WIDTH, HEIGHT);
+      const { x, y } = window.map.getRandomFloorTile();
+      player.x = x;
+      player.y = y;
+      explored.clear();
+      visible.clear();
+      addMessage("Dungeon regenerated!");
+      gameLoop();
+    },
+    toggleFOVCallback: () => {
+      // handle FOV toggle
+    },
+    muteCallback: () => {
+      // handle mute
+    }
+  });
 
-    const newMap = createMap(WIDTH, HEIGHT);
-
-    // reset player on valid floor
-    const { x, y } = newMap.getRandomFloorTile();
-    player.x = x;
-    player.y = y;
-
-    explored.clear();
-    visible.clear();
-
-    // update global map reference
-    window.map = newMap;
-
-    addMessage("Dungeon regenerated!");
-    gameLoop();
-  },
-  toggleFOVCallback: () => {
-    playClick();
-    showFOV = !showFOV;
-    addMessage(showFOV ? "FOV enabled" : "FOV disabled");
-    gameLoop();
-  },
-  muteCallback: () => {
-    muted = !muted;
-    playClick();
-    addMessage(muted ? "Muted" : "Unmuted");
-  },
+  // initial render
+  gameLoop();
+  addMessage("Welcome to Bitcrawl! Use arrow keys or WASD to move.");
 });
-
-// -------------------
-// Setup input for player movement
-// -------------------
-setupInput(player, gameLoop);
-
-// -------------------
-// Initial render
-// -------------------
-gameLoop();
