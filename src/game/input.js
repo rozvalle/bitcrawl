@@ -1,6 +1,7 @@
 import { stepSound, bumpSound } from "../audio/sounds";
 import { monsters } from "./monster";
 import { addMessage } from "../ui";
+import { startFight, isDead, inFight } from "./fight";
 
 const DIRS = {
     ArrowUp: [0, -1],
@@ -15,7 +16,10 @@ const DIRS = {
 
 export function setupInput(player, redraw) {
     window.addEventListener("keydown", (e) => {
-        const dir = DIRS[e.key];
+        const key = e.key.toLocaleLowerCase();
+        const dir = DIRS[key];
+        if (isDead) return; // ❌ ignore keys if dead
+        if (inFight) return; // ❌ ignore keys while fighting
         if (!dir) return;
 
         const nx = player.x + dir[0];
@@ -25,11 +29,8 @@ export function setupInput(player, redraw) {
         // check for monster first
         const monster = monsters.find(m => m.alive && m.x === nx && m.y === ny);
         if (monster) {
-            monster.alive = false;         // kill monster immediately
-            addMessage(`You defeated a ${monster.type}!`);
-            stepSound();                   // optional sound
-            redraw();
-            return; // stop normal movement (optional: move into the tile)
+            startFight(player, monster, redraw);
+            return; // stop movement while fight is active
         }
 
         // If no monster, check if tile is walkable
