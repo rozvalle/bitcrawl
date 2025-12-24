@@ -3,8 +3,8 @@ import floorImg from "../assets/sprites/floor1.png";
 import wallImg from "../assets/sprites/wall1.png";
 import playerImg from "../assets/sprites/player1.png";
 import goblinImg from "../assets/sprites/player1.png";
-import slimeImg from "../assets/sprites/player1.png";
-import batImg from "../assets/sprites/player1.png";
+import slimeImg from "../assets/sprites/slime.png";
+import batImg from "../assets/sprites/bat.png";
 
 export const sprites = {
     floor: new Image(),
