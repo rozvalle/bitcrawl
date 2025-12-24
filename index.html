@@ -31,6 +31,43 @@
 
   </div>
 
+
+  <div id="fightModal">
+    <div class="modal-content">
+      <p class="title">Battle!</p>
+
+      <!-- Player Health -->
+      <div class="health-bar-container">
+        <p>Player</p>
+        <div class="health-bar">
+          <div id="playerHP" class="health-fill" style="width: 100%;"></div>
+        </div>
+        <div id="playerHPText" class="health-text">20 / 20</div>
+      </div>
+
+      <!-- Monster Health -->
+      <div class="health-bar-container">
+        <p>Monster</p>
+        <div class="health-bar">
+          <div id="monsterHP" class="health-fill" style="width: 100%;"></div>
+        </div>
+        <div id="monsterHPText" class="health-text">10 / 10</div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="button-container">
+        <button id="attackBtn" class="nes-btn">Attack</button>
+        <button id="runBtn" class="nes-btn">Run</button>
+      </div>
+
+      <!-- Fight messages -->
+      <div id="fightText" class="fight-text"></div>
+    </div>
+  </div>
+
+  </div>
+
+
   <script type="module" src="/src/main.js"></script>
 </body>
 
