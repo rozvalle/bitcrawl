@@ -1,22 +1,28 @@
+// Import the images using Vite/Webpack
+import floorImg from "../assets/sprites/floor1.png";
+import wallImg from "../assets/sprites/wall1.png";
+import playerImg from "../assets/sprites/player1.png";
+
 export const sprites = {
-    wall: new Image(),
     floor: new Image(),
-    player: new Image()
+    wall: new Image(),
+    player: new Image(),
 };
 
-// set source paths
-sprites.wall.src = "../assets/sprites/download.png";
-sprites.floor.src = "../assets/sprites/download.png";
-sprites.player.src = "../assets/sprites/download.png";
+// Assign the imported URLs to the images
+sprites.floor.src = floorImg;
+sprites.wall.src = wallImg;
+sprites.player.src = playerImg;
 
-// optional: wait for all images to load before starting game
-export function loadSprites(callback) {
+// Helper to wait for all images to load
+export function loadSprites(onReady) {
+    const images = Object.values(sprites);
     let loaded = 0;
-    const total = Object.keys(sprites).length;
-    Object.values(sprites).forEach(img => {
+
+    images.forEach(img => {
         img.onload = () => {
             loaded++;
-            if (loaded === total) callback();
+            if (loaded === images.length) onReady();
         };
     });
 }
